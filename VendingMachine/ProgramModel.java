@@ -1,3 +1,5 @@
+import javax.swing.JTextField;
+
 public class ProgramModel {
 
     private VendingMachine vendingMachine;   
@@ -41,10 +43,8 @@ public class ProgramModel {
  
     public String getMachineDetails() {
         
-        String formatted = "Balance: ";
-
-        int cash = vendingMachine.getCurrentDenom().getTotal();
-        formatted += cash + "\n" + "_____________________\n";
+        String formatted = "Balance: " + vendingMachine.getCurrentDenom().getTotal() + " Php\n";
+        formatted += "_____________________\n\n";
 
         int productCount = vendingMachine.getProductCount();
 
@@ -53,14 +53,95 @@ public class ProgramModel {
         }
         else{
             Products[] slots = vendingMachine.getSlots();
+            int[] stockInSlots = vendingMachine.getStockInSlots();
 
             for(int i = 0; i < productCount; i++){
-                formatted += slots[i].getName() + " || " + slots[i].getPrice() + " || "
-                           + slots[i].getCalories() + "\n";
+                formatted += "Slot [" + (i+1) +"] : " + slots[i].getName() + " (" + stockInSlots[i] + "x) | " + 
+                            slots[i].getPrice() + " Php | " + slots[i].getCalories() + " cal\n";
             }
         }
 
         return formatted;
+    }
+
+    public String getDenomDetails() {
+
+        String formatted = "Balance: " + vendingMachine.getCurrentDenom().getTotal() + " Php\n";
+        formatted += "_____________________\n\n";
+
+        Denominations denom = vendingMachine.getCurrentDenom();
+        formatted += "1000 Php | ( " + denom.getDenom(1000) + "x )\n";
+        formatted += "500 Php | ( " + denom.getDenom(500) + "x )\n";
+        formatted += "200 Php | ( " + denom.getDenom(200) + "x )\n";
+        formatted += "100 Php | ( " + denom.getDenom(100) + "x )\n";                 
+        formatted += "50 Php | ( " + denom.getDenom(50) + "x )\n";
+        formatted += "20 Php | ( " + denom.getDenom(20) + "x )\n";  
+        formatted += "10 Php | ( " + denom.getDenom(10) + "x )\n";
+        formatted += "5 Php | ( " + denom.getDenom(5) + "x )\n";  
+        formatted += "1 Php | ( " + denom.getDenom(1) + "x )\n";
+        
+        return formatted;
+    }
+
+    public boolean updateVendingDenom(JTextField[] tfArr){
+
+        int[] cCount = new int[9];
+        boolean ret = true;
+        for(int i = 0; i < tfArr.length && ret != false; i++){
+            try{
+                cCount[i] = Integer.parseInt(tfArr[i].getText());
+                if(cCount[i] < 0){ // no negatives
+                    ret = false;
+                }
+            }
+            catch (NumberFormatException e){
+                ret = false;
+            }
+        }
+
+        if(ret == false){
+            return ret;
+        }
+
+        vendingMachine.getCurrentDenom().updateDenom(cCount[0], 1000);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[1], 500);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[2], 200);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[3], 100);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[4], 50);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[5], 20);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[6], 10);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[7], 5);
+        vendingMachine.getCurrentDenom().updateDenom(cCount[8], 1);
+
+        return ret;
+    }
+
+    public boolean updateVendingProduct(JTextField[] tfArr){
+        
+        int[] cVal = new int[3];
+        boolean ret = true;
+        for(int i = 0; i < tfArr.length && ret != false; i++){
+            try{
+                cVal[i] = Integer.parseInt(tfArr[i].getText());
+                if(cVal[i] < 0 && i != 0){ // restock amount & price cannot be negative
+                    ret = false;
+                }
+            }
+            catch (NumberFormatException e){
+                ret = false;
+            }
+        }
+
+        if(ret == false){
+            return ret;
+        }
+
+        //cVal[0] = index of product
+            // check if there is product in that index, else return false
+        //cVal[1] = restock amount.... note to clone the object
+            // check if restock amount is more than the stock for that slot
+        //cVal[2] = updatedPrice
+        return ret;
     }
 
     public Products[] getProductList() {
@@ -83,13 +164,21 @@ public class ProgramModel {
         return this.productIndex;
     }
 
-    public boolean addProduct(Products product) {
-        if(vendingMachine.addToSlots(product)){
-            return true;
+    public int addProduct(Products product) {
+
+        int ret = 0;
+        if(vendingMachine.addToSlots(product) == 0){
+            ret = 0;
         }
-        else{
-            return false;
+        else if(vendingMachine.addToSlots(product) == 1){
+            ret = 1;
         }
+        else if(vendingMachine.addToSlots(product) == 2){
+            ret = 2;
+        }
+
+        return ret;
+        
     }
 
 }

@@ -11,7 +11,6 @@ public class Products {
     /**
      * Constructs a new instance of the Products class with the specified stock, name, calories, and price.
      *
-     * @param stock the initial stock of the product
      * @param name the name of the product
      * @param calories the number of calories in the product
      * @param price the price of the product

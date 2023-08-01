@@ -1,32 +1,60 @@
+import java.util.ArrayList;
+
 public class VendingMachine {
     
     private Products[] slots; // at least 8
+    private int maxStock;
+    private int[] stockInSlots;
+    private ArrayList<Products[]> startingStock;
     private int productCount;
-    private int[] startingStock;
     private int maxSlots;
     private Denominations currentDenom;
 
     public VendingMachine() {
         this.maxSlots = 10;
+        this.maxStock = 15;
         this.productCount = 0;
-        this.slots = new Products[maxSlots];
-        this.startingStock = new int[10];
+        this.stockInSlots = new int[maxSlots];
+        this.startingStock = new ArrayList<Products[]>();
         this.currentDenom = new Denominations();
     }
 
-    public boolean addToSlots(Products productAdded) {
+    public int addToSlots(Products productAdded) {
 
-        if(productCount < maxSlots){
+        boolean isAdded = false;
+        
+        // check if product is added already.
+        for(int i = 0; i < productCount; i++){
+            if(productAdded.getName() == slots[i].getName()){
+                isAdded = true;
+                
+            }
+        }
+        
+        if(productCount < maxSlots && !isAdded){
             slots[productCount] = productAdded;
+            stockInSlots[productCount] = 0;
             productCount++;
-            return true;
+            return 0;
+        }
+        else if(isAdded == true){
+            return 1;
         }
         else{
-            return false;
+            return 2;
         }
     }
 
-    public boolean restockProduct(Products productRestocked, int restockAmount) {
+    public int[] getStockInSlots() {
+        return stockInSlots;
+    }
+
+    public boolean restockProduct(int productSlotIndex, int restockAmount) {
+
+        for(int i = 0; i < restockAmount; i++){
+            slots[productSlotIndex].clone();
+
+        }
 
         return true;
     }
