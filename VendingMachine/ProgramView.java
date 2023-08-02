@@ -120,6 +120,9 @@ public class ProgramView {
     JButton pay = new JButton("Pay");
     JTextArea payArea = new JTextArea();
 
+    JTextArea reciept = new JTextArea();
+
+    JTextArea summaryTransactions = new JTextArea();
 
     public ProgramView() {
         this.mainFrame = new JFrame("Vending Machine Simulator");
@@ -550,34 +553,34 @@ public class ProgramView {
         switch(vm.getProductCount()){
             case 10: 
                 product10.setText("[10]: " + vm.getSlots()[9].getName());
-                product10Lbl.setText("(" + vm.getStockInSlots()[9] + "x)");
+                product10Lbl.setText("(" + vm.getStockInSlots()[9] + "x) " + vm.getSlots()[9].getCalories() + " cal");
             case 9:
                 product9.setText("[9]: " + vm.getSlots()[8].getName());
-                product9Lbl.setText("(" + vm.getStockInSlots()[8] + "x)");
+                product9Lbl.setText("(" + vm.getStockInSlots()[8] + "x) " + vm.getSlots()[8].getCalories() + " cal");
             case 8:
                 product8.setText("[8]: " + vm.getSlots()[7].getName());
-                product8Lbl.setText("(" + vm.getStockInSlots()[7] + "x)");
+                product8Lbl.setText("(" + vm.getStockInSlots()[7] + "x) " + vm.getSlots()[7].getCalories() + " cal");
             case 7:
                 product7.setText("[7]: " + vm.getSlots()[6].getName());
-                product7Lbl.setText("(" + vm.getStockInSlots()[6] + "x)");
+                product7Lbl.setText("(" + vm.getStockInSlots()[6] + "x) " + vm.getSlots()[6].getCalories() + " cal");
             case 6:
                 product6.setText("[6]: " + vm.getSlots()[5].getName());
-                product6Lbl.setText("(" + vm.getStockInSlots()[5] + "x)");
+                product6Lbl.setText("(" + vm.getStockInSlots()[5] + "x) " + vm.getSlots()[5].getCalories() + " cal");
             case 5:
                 product5.setText("[5]: " + vm.getSlots()[4].getName());
-                product5Lbl.setText("(" + vm.getStockInSlots()[4] + "x)");
+                product5Lbl.setText("(" + vm.getStockInSlots()[4] + "x) " + vm.getSlots()[4].getCalories() + " cal");
             case 4:
                 product4.setText("[4]: " + vm.getSlots()[3].getName());
-                product4Lbl.setText("(" + vm.getStockInSlots()[3] + "x)");
+                product4Lbl.setText("(" + vm.getStockInSlots()[3] + "x) " + vm.getSlots()[3].getCalories() + " cal");
             case 3:
                 product3.setText("[3]: " + vm.getSlots()[2].getName());
-                product3Lbl.setText("(" + vm.getStockInSlots()[2] + "x)");
+                product3Lbl.setText("(" + vm.getStockInSlots()[2] + "x) " + vm.getSlots()[2].getCalories() + " cal");
             case 2:
                 product2.setText("[2]: " + vm.getSlots()[1].getName());
-                product2Lbl.setText("(" + vm.getStockInSlots()[1] + "x)");
+                product2Lbl.setText("(" + vm.getStockInSlots()[1] + "x) " + vm.getSlots()[1].getCalories() + " cal");
             case 1:
                 product1.setText("[1]: " + vm.getSlots()[0].getName());
-                product1Lbl.setText("(" + vm.getStockInSlots()[0] + "x)");
+                product1Lbl.setText("(" + vm.getStockInSlots()[0] + "x) " + vm.getSlots()[0].getCalories() + " cal");
                 break;
             case 0:
                 System.out.println("No products in the vending machine.");
@@ -660,7 +663,7 @@ public class ProgramView {
         JPanel panel3 = new JPanel();
 
         // add components to panel
-        title = new JLabel("Transact Menu");
+        title = new JLabel("Payment Menu");
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Arial", Font.BOLD, 25));
 
@@ -698,6 +701,87 @@ public class ProgramView {
         mainFrame.add(panel6, BorderLayout.CENTER);
         mainFrame.add(panel3, BorderLayout.SOUTH);
     }
+
+    public void recieptMenu(String formattedReceipt) {
+
+        refreshFrame();
+
+        // create panel
+        JPanel panel1 = new JPanel();
+        panel1.setBorder(BorderFactory.createEmptyBorder(50, 50, 10, 50));
+        panel1.setLayout(new BorderLayout(0, 1)); 
+    
+        JPanel panel2 = new JPanel();
+        panel2.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        panel2.setLayout(new GridLayout(2, 0, 7, 7));
+        
+        JPanel panel3 = new JPanel();
+
+        // add components to panel
+        title = new JLabel("Reciept");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+
+        reciept.setText(formattedReceipt);
+        panel1.add(title);
+        panel2.add(reciept);
+        panel2.add(returnToTestBtn);        
+        panel3.add(feedback);
+
+        //add components
+        panel1.setBackground(Color.darkGray);
+        panel3.setBackground(Color.LIGHT_GRAY);
+        mainFrame.add(panel1, BorderLayout.NORTH);
+        mainFrame.add(panel2, BorderLayout.CENTER);
+        mainFrame.add(panel3, BorderLayout.SOUTH);
+    }
+
+    public void transactionSummaryMenu() {
+        
+        refreshFrame();
+ 
+        // create panel
+        JPanel panel1 = new JPanel();
+        panel1.setBorder(BorderFactory.createEmptyBorder(50, 50, 10, 50));
+        panel1.setLayout(new BorderLayout(0, 1)); 
+    
+        JPanel panel2 = new JPanel();
+        panel2.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        panel2.setLayout(new GridLayout(0, 1, 7, 7));
+        panel2.setPreferredSize(new Dimension(330, 100));
+        
+        JPanel panel3 = new JPanel();
+
+        JPanel panel4 = new JPanel();
+        panel4.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        panel4.setLayout(new GridBagLayout()); 
+
+        JPanel panel5 = new JPanel(); 
+        panel5.setLayout(new GridLayout(2, 3, 7, 7));
+        panel5.setSize(new Dimension(300, 150));
+
+        // add components to panel
+        title = new JLabel("Maintenance Menu");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+
+        panel1.add(title);
+        panel5.add(returnToMaintenanceBtn);
+        panel2.add(panel5);
+        panel3.add(feedback);
+        panel4.add(summaryTransactions);
+
+        //add components
+        panel1.setBackground(Color.darkGray);
+        panel3.setBackground(Color.LIGHT_GRAY);
+        panel4.setBackground(Color.gray);
+        mainFrame.add(panel1, BorderLayout.NORTH);
+        mainFrame.add(panel2, BorderLayout.EAST);
+        mainFrame.add(panel3, BorderLayout.SOUTH);
+        mainFrame.add(panel4);
+
+    }
+
 
     // BUTTON LISTENERS --------------------------
 
@@ -865,6 +949,10 @@ public class ProgramView {
 		this.c1Pay.addActionListener(actionListener);
 	}
 
+    public void setPayBtnListener(ActionListener actionListener) {
+		this.pay.addActionListener(actionListener);
+	}
+
     // MISC ---------------------
 
     public void setPayDetails(String formatted) {
@@ -934,4 +1022,7 @@ public class ProgramView {
         machineDetails = new JTextArea(formatted);
     }
 
+    public void setSummaryTransactions(String formatted) {
+        summaryTransactions.setText(formatted);
+    }
 }

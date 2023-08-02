@@ -1,4 +1,5 @@
 import javax.swing.JTextField;
+import java.util.ArrayList;
 
 public class ProgramModel {
 
@@ -81,7 +82,6 @@ public class ProgramModel {
         formatted += "[1 Php]: (" + userDenom.getDenom(1) + "x)\t\t\n\n";
 
         formatted += "Total: " + userDenom.getTotal() + " Php";
-
 
         return formatted;
 
@@ -229,6 +229,161 @@ public class ProgramModel {
 
     public Denominations getUserDenom(){
         return userDenom;
+    }
+
+    public int transact(){
+
+        int productToBeSoldIndex = 0;
+
+        for(int i = 0; i < vendingMachine.getProductCount(); i++){
+            if(vendingMachine.getSlots()[i].getName() == productToBeSold.getName()){
+                productToBeSoldIndex = i;
+            }
+        }
+
+        int userCash = userDenom.getTotal();
+        int[] changeReturned = getVendingMachine().getChangeReturned();
+        int productCost = vendingMachine.getSlots()[productToBeSoldIndex].getPrice();
+        boolean isBought = false;
+
+        if(userCash < productCost){ // not enough money
+            return 0;
+        }
+        else if(userCash > productCost){
+            if(getVendingMachine().produceChange(userCash-productCost) == (userCash-productCost)){
+                isBought = true;
+
+                System.out.println("Change Returned: ");
+                for(int i = 0; i < changeReturned.length; i++){
+                    if(changeReturned[i] != 0){
+                        switch(i){
+                            case 0: System.out.println("(" + changeReturned[i] + "x) " + " 1000 Peso Bill/s");
+                                break;  
+                            case 1: System.out.println("(" + changeReturned[i] + "x) " + " 500 Peso Bill/s");
+                                break;   
+                            case 2: System.out.println("(" + changeReturned[i] + "x) " + " 200 Peso Bill/s");
+                                break;
+                            case 3: System.out.println("(" + changeReturned[i] + "x) " + " 100 Peso Bill/s");
+                                break;
+                            case 4: System.out.println("(" + changeReturned[i] + "x) " + " 50 Peso Bill/s");
+                                break;  
+                            case 5: System.out.println("(" + changeReturned[i] + "x) " + " 20 Peso Bill/s");
+                                break;
+                            case 6: System.out.println("(" + changeReturned[i] + "x) " + " 10 Peso Bill/s");
+                                break;
+                            case 7: System.out.println("(" + changeReturned[i] + "x) " + " 5 Peso Bill/s");
+                                break;
+                            case 8: System.out.println("(" + changeReturned[i] + "x) " + " 1 Peso Bill/s");
+                                break;
+                        }
+                    }
+                }
+
+            }
+            else{
+                return 1; // cannot produce change
+            }
+        }
+        else if(userCash == productCost){
+            isBought = true;
+        }
+
+        if(isBought == true){
+            // reduce stock
+            vendingMachine.reduceStock(productToBeSoldIndex);
+
+            // add cash input of user to current denom of vm
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(1), 1);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(5), 5);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(10), 10);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(20), 20);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(50), 50);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(100), 100);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(200), 200);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(500), 500);
+            getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(1000), 1000);
+        }
+
+        return 2; // item bought successfully
+    }
+
+    public String generateReceipt() {
+
+        String formatted = "Product Bought: " + productToBeSold.getName() + "\n\n";
+        
+        formatted += "Money Provided: " + userDenom.getTotal() + " Php \n\n";
+
+        int[] change = vendingMachine.getChangeReturned();
+
+        int total = 0;
+        total += change[0] * 1000;
+        total += change[1] * 500;
+        total += change[2] * 200;
+        total += change[3] * 100;
+        total += change[4] * 50;
+        total += change[5] * 20;
+        total += change[6] * 10;
+        total += change[7] * 5;
+        total += change[8] * 1;
+
+        formatted += "Change: " + total + " Php\n\n";
+
+        vendingMachine.resetChange();
+        return formatted;
+
+    }
+
+    public String getSummaryTransactions() {
+
+        Products[] slots = vendingMachine.getSlots();
+        Products[][] startingStock = vendingMachine.getStartingStock();
+        Products[][] currentStock = vendingMachine.getCurrentStock();
+
+
+        String formatted = "[Starting Inventory & Ending Inventory]\n\n";
+        
+        formatted += "_____________________\n\n";
+
+        int currentStockCounter = 0;
+        int startingStockCounter = 0;
+
+        ArrayList<Integer> currentStockArr = new ArrayList<Integer>();
+        ArrayList<Integer> startStockArr = new ArrayList<Integer>();
+
+        for(int i = 0; i < vendingMachine.getProductCount(); i++){
+
+            formatted += "Slot [" + (i+1) +"]: " + slots[i].getName() + "\n";
+            
+            startingStockCounter = 0;
+            int j = 0;
+
+            while(startingStock[i][j] != null){
+                startingStockCounter++;
+                j++;                
+            }
+
+            currentStockCounter = 0;
+            j = 0;
+            
+            while(currentStock[i][j] != null){
+                currentStockCounter++;
+                j++;                
+            }
+
+            currentStockArr.add(currentStockCounter);
+            startStockArr.add(startingStockCounter);
+
+            formatted += "(" + startingStockCounter + "x) -> (" + currentStockCounter + "x)\n\n";
+        }
+
+        int moneyCollected = 0;
+
+        for(int i = 0; i < vendingMachine.getProductCount(); i++){
+            moneyCollected += (startStockArr.get(i) - currentStockArr.get(i)) * slots[i].getPrice();
+        }
+
+        formatted += "Cash Amount (since last restock) : " + moneyCollected + " Php";
+        return formatted;
     }
 
 }
