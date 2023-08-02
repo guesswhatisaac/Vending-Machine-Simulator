@@ -1,6 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JTextField;
+
 public class ProgramController {
     private ProgramModel model;
     private ProgramView view;
@@ -112,11 +114,15 @@ public class ProgramController {
         view.setUpdateProductBtnListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if(/*view.getModifyTF()*/){
-                    // product is modified successfully
+                if(model.updateVendingProduct(view.getModifyTF())){
+                    view.setMachineDetails(model.getMachineDetails());
+                    view.modifyProductsMenu();
+                    System.out.println("Products modified succesfully!");
+                    view.setFeedback("Products modified succesfully!");
                 }
                 else{
-                    // product in that index does not exist
+                    System.out.println("Products modification unsuccessful. Invalid input detected.");
+                    view.setFeedback("Products modification unsuccessful. Invalid input detected.");
                 }
             }
         });

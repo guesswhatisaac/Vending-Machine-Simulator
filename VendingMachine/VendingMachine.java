@@ -1,21 +1,20 @@
-import java.util.ArrayList;
-
 public class VendingMachine {
     
     private Products[] slots; // at least 8
     private int maxStock;
     private int[] stockInSlots;
-    private ArrayList<Products[]> startingStock;
+    private Products[][] startingStock;
     private int productCount;
     private int maxSlots;
     private Denominations currentDenom;
 
     public VendingMachine() {
         this.maxSlots = 10;
+        this.slots = new Products[maxSlots];
         this.maxStock = 15;
         this.productCount = 0;
         this.stockInSlots = new int[maxSlots];
-        this.startingStock = new ArrayList<Products[]>();
+        this.startingStock = new Products[maxSlots][maxStock];
         this.currentDenom = new Denominations();
     }
 
@@ -27,7 +26,6 @@ public class VendingMachine {
         for(int i = 0; i < productCount; i++){
             if(productAdded.getName() == slots[i].getName()){
                 isAdded = true;
-                
             }
         }
         
@@ -51,9 +49,16 @@ public class VendingMachine {
 
     public boolean restockProduct(int productSlotIndex, int restockAmount) {
 
-        for(int i = 0; i < restockAmount; i++){
-            slots[productSlotIndex].clone();
+        // if restock amount + stock in product index is greater than max stock, return false
+        if(restockAmount + stockInSlots[productSlotIndex] > maxStock){ 
+            return false;
+        }
 
+        for(int i = 0; i < restockAmount; i++){
+            System.out.println(i);
+            Products productClone = slots[productSlotIndex];
+            startingStock[productSlotIndex][stockInSlots[productSlotIndex]] = productClone;
+            stockInSlots[productSlotIndex]++;
         }
 
         return true;
@@ -67,16 +72,16 @@ public class VendingMachine {
         return this.productCount;
     }
 
-    public int[] getStartingStock() {
-        return this.startingStock;
-    }
-
     public int getMaxSlots() {
         return this.maxSlots;
     }
 
     public Denominations getCurrentDenom() {
         return this.currentDenom;
+    }
+
+    public int getMaxStock(){
+        return this.maxStock;
     }
 
 }

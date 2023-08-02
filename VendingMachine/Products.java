@@ -1,9 +1,8 @@
 /**
  * Represents a product with its stock, name, calories, and price.
  */
-public class Products {
+public class Products implements Cloneable {
     
-    // NOTE: IF OBJECT SOLD, IT MUST BE DESTROYED. NO USE FOR STOCK VARIABLE
     private String name;
     private float calories;
     private int price; // change to float when centavos are implemented

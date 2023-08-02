@@ -120,14 +120,31 @@ public class ProgramModel {
         
         int[] cVal = new int[3];
         boolean ret = true;
+        
         for(int i = 0; i < tfArr.length && ret != false; i++){
             try{
                 cVal[i] = Integer.parseInt(tfArr[i].getText());
-                if(cVal[i] < 0 && i != 0){ // restock amount & price cannot be negative
+
+                if(i == 0 && ((cVal[0]-1) >= vendingMachine.getMaxSlots()) || ((cVal[0]-1) < 0)){ // out of bounds index
+                    System.out.println("Product index out of bounds.");
+                    ret = false;
+                }
+                else if(vendingMachine.getSlots()[cVal[0]-1] == null){
+                    System.out.println("Product does not exist in slot.");
+                    ret = false;
+                }
+                else if(cVal[i] < 0 && i != 0){ // restock amount & price cannot be negative
+                    System.out.println("Negative restock amount and price not allowed.");
+                    ret = false;
+                }
+                else if(i == 1 && (vendingMachine.getStockInSlots()[cVal[0]-1]+cVal[1] > vendingMachine.getMaxStock())){ 
+                    // if restock amount+productSlotCount is greater than limit
+                    System.out.println("Restock amount is greater than limit.");
                     ret = false;
                 }
             }
-            catch (NumberFormatException e){
+            catch (NumberFormatException e){ // catch invalid inputs
+                System.out.println("Input contains non-integer value.");
                 ret = false;
             }
         }
@@ -136,11 +153,10 @@ public class ProgramModel {
             return ret;
         }
 
-        //cVal[0] = index of product
-            // check if there is product in that index, else return false
-        //cVal[1] = restock amount.... note to clone the object
-            // check if restock amount is more than the stock for that slot
-        //cVal[2] = updatedPrice
+        // restock and update price
+        vendingMachine.restockProduct(cVal[0]-1, cVal[1]);
+        vendingMachine.getSlots()[cVal[0]-1].updatePrice(cVal[2]);
+
         return ret;
     }
 
