@@ -3,8 +3,12 @@ import java.util.ArrayList;
 
 public class ProgramModel {
 
-    private VendingMachine vendingMachine;   
+    private RegularVM vm1 = new RegularVM();   
+    private SpecialVM vm2 = new SpecialVM();
+    private int activeVM = 0;
     private Products productList[];
+    private Products custom[];
+    private Products required[];
     private int productIndex = 0;
     private Products productToBeSold;
     private Denominations userDenom = new Denominations();
@@ -12,17 +16,28 @@ public class ProgramModel {
     // MAIN MENU -------------------
 
     public void createRegularVM() {
-        RegularVM regularVM = new RegularVM();
-        this.vendingMachine = regularVM;
+        this.vm1 = new RegularVM();
+        activeVM = 1;
+        productIndex = 0;
+        initializeProducts();
     }
 
     public void createSpecialVM() {
-        SpecialVM specialVM = new SpecialVM();
-        this.vendingMachine = specialVM;
+        this.vm2 = new SpecialVM();
+        activeVM = 2;
+        productIndex = 0;
+        initializeProducts();
     }
 
     public VendingMachine getVendingMachine() {
-        return vendingMachine;
+        switch(activeVM){
+            case 1:
+            return vm1;
+            case 2:
+            return vm2;
+            default:
+            return null;
+        }
     }
 
     // MAINTENANCE & TEST FEATURES -------------
@@ -31,40 +46,101 @@ public class ProgramModel {
         Products Strawberry = new Products("Strawberry",  8.64f, 25);
         Products Blueberries = new Products("Blueberries",  80f, 150);
         Products Chocolate_Bar = new Products("Chocolate Bar",  556f, 90);
-        Products Sugar = new Products("Sugar (100 Grams)",  387f, 120);
         Products Oreos = new Products("Oreos",  160f, 35);
-        Products Can_of_Frosting = new Products("Can of Frosting",  418f, 165);
         Products Ice_Cream_Can = new Products("Ice Cream Can",  1500f, 350);
         Products Cherries = new Products("Cherries",  50f, 50);
-        Products Can_of_Sprinkles = new Products("Can of Sprinkles",  418f, 100);
         Products Mangoes = new Products("Mangoes",  150f, 350);
+
+        Products Can_of_Sprinkles = new Products("Can of Sprinkles",  418f, 100);
+        Products Can_of_Frosting = new Products("Can of Frosting",  418f, 165);
         Products Cream_Cheese = new Products("Cream Cheese",  350f, 50);
 
-        productList = new Products[]{Strawberry, Blueberries, Chocolate_Bar, Sugar, Oreos, Can_of_Frosting,
+        Products Sugar = new Products("Sugar (1 cup)",  773f, 40);
+        Products Butter = new Products("Butter (1 cup)", 1627, 100);
+        Products Eggs = new Products("Eggs (2 pcs)", 156, 20);
+        Products Flour = new Products("Flour (2 cups)", 910, 20);
+        Products Baking_Powder = new Products("Baking Powder (2 tsp)", 4, 18);
+        Products Milk = new Products("Milk", 103, 10);
+
+        switch(activeVM){
+            case 1:
+            productList = new Products[]{Strawberry, Blueberries, Chocolate_Bar, Sugar, Oreos, Can_of_Frosting,
                                     Ice_Cream_Can, Cherries, Can_of_Sprinkles, Mangoes, Cream_Cheese};
+            break;
+            case 2:
+            productList = new Products[]{Strawberry, Blueberries, Chocolate_Bar, Oreos, Ice_Cream_Can, Cherries, Mangoes, 
+                                        Can_of_Sprinkles, Can_of_Frosting, Cream_Cheese,
+                                        Sugar, Butter, Eggs, Flour, Baking_Powder, Milk};
+            break;
+        }
+        
     }
  
+    public void initializeCake(){
+        custom = new Products[10];
+        required = new Products[6];
+        int i;
+        int j=0;
+
+        for(i=0;i<10;i++){
+            custom[j] = productList[i];
+            j++;
+        }
+
+        j=0;
+        for(i=10;i<16;i++){
+            required[j] = productList[i];
+            j++;
+        }
+    }
+
     public String getMachineDetails() {
         
-        String formatted = "Balance: " + vendingMachine.getCurrentDenom().getTotal() + " Php\n";
-        formatted += "_____________________\n\n";
+        String formatted;
+        int productCount;
 
-        int productCount = vendingMachine.getProductCount();
+        switch(activeVM){
+            case 1:
+            formatted = "Balance: " + vm1.getCurrentDenom().getTotal() + " Php\n";
+            formatted += "_____________________\n\n";
 
-        if(productCount == 0){
-            formatted += "No products in the vending machine.\n\n\n\n";
-        }
-        else{
-            Products[] slots = vendingMachine.getSlots();
-            int[] stockInSlots = vendingMachine.getStockInSlots();
+            productCount = vm1.getProductCount();
 
-            for(int i = 0; i < productCount; i++){
-                formatted += "Slot [" + (i+1) +"] : " + slots[i].getName() + " (" + stockInSlots[i] + "x) | " + 
-                            slots[i].getPrice() + " Php | " + slots[i].getCalories() + " cal\n";
+            if(productCount == 0){
+                formatted += "No products in the vending machine.\n\n\n\n";
             }
-        }
+            else{
+                Products[] slots = vm1.getSlots();
+                int[] stockInSlots = vm1.getStockInSlots();
 
-        return formatted;
+                for(int i = 0; i < productCount; i++){
+                    formatted += "Slot [" + (i+1) +"] : " + slots[i].getName() + " (" + stockInSlots[i] + "x) | " + 
+                                slots[i].getPrice() + " Php | " + slots[i].getCalories() + " cal\n";
+                }
+            }
+            return formatted;
+            case 2:
+            formatted = "Balance: " + vm2.getCurrentDenom().getTotal() + " Php\n";
+            formatted += "_____________________\n\n";
+
+            productCount = vm2.getProductCount();
+
+            if(productCount == 0){
+                formatted += "No products in the vending machine.\n\n\n\n";
+            }
+            else{
+                Products[] slots = vm2.getSlots();
+                int[] stockInSlots = vm2.getStockInSlots();
+
+                for(int i = 0; i < productCount; i++){
+                    formatted += "Slot [" + (i+1) +"] : " + slots[i].getName() + " (" + stockInSlots[i] + "x) | " + 
+                                slots[i].getPrice() + " Php | " + slots[i].getCalories() + " cal\n";
+                }
+            }
+            return formatted;
+            default:
+            return "null";
+        }
     }
 
     public String getPayDetails() {
@@ -89,21 +165,45 @@ public class ProgramModel {
 
     public String getDenomDetails() {
 
-        String formatted = "Balance: " + vendingMachine.getCurrentDenom().getTotal() + " Php\n";
-        formatted += "_____________________\n\n";
-
-        Denominations denom = vendingMachine.getCurrentDenom();
-        formatted += "1000 Php | ( " + denom.getDenom(1000) + "x )\n";
-        formatted += "500 Php | ( " + denom.getDenom(500) + "x )\n";
-        formatted += "200 Php | ( " + denom.getDenom(200) + "x )\n";
-        formatted += "100 Php | ( " + denom.getDenom(100) + "x )\n";                 
-        formatted += "50 Php | ( " + denom.getDenom(50) + "x )\n";
-        formatted += "20 Php | ( " + denom.getDenom(20) + "x )\n";  
-        formatted += "10 Php | ( " + denom.getDenom(10) + "x )\n";
-        formatted += "5 Php | ( " + denom.getDenom(5) + "x )\n";  
-        formatted += "1 Php | ( " + denom.getDenom(1) + "x )\n";
+        String formatted;
+        Denominations denom;
         
-        return formatted;
+        switch(activeVM){
+            case 1:
+            formatted = "Balance: " + vm1.getCurrentDenom().getTotal() + " Php\n";
+            formatted += "_____________________\n\n";
+
+            denom = vm1.getCurrentDenom();
+            formatted += "1000 Php | ( " + denom.getDenom(1000) + "x )\n";
+            formatted += "500 Php | ( " + denom.getDenom(500) + "x )\n";
+            formatted += "200 Php | ( " + denom.getDenom(200) + "x )\n";
+            formatted += "100 Php | ( " + denom.getDenom(100) + "x )\n";                 
+            formatted += "50 Php | ( " + denom.getDenom(50) + "x )\n";
+            formatted += "20 Php | ( " + denom.getDenom(20) + "x )\n";  
+            formatted += "10 Php | ( " + denom.getDenom(10) + "x )\n";
+            formatted += "5 Php | ( " + denom.getDenom(5) + "x )\n";  
+            formatted += "1 Php | ( " + denom.getDenom(1) + "x )\n";
+            
+            return formatted;
+            case 2:
+            formatted = "Balance: " + vm2.getCurrentDenom().getTotal() + " Php\n";
+            formatted += "_____________________\n\n";
+
+            denom = vm2.getCurrentDenom();
+            formatted += "1000 Php | ( " + denom.getDenom(1000) + "x )\n";
+            formatted += "500 Php | ( " + denom.getDenom(500) + "x )\n";
+            formatted += "200 Php | ( " + denom.getDenom(200) + "x )\n";
+            formatted += "100 Php | ( " + denom.getDenom(100) + "x )\n";                 
+            formatted += "50 Php | ( " + denom.getDenom(50) + "x )\n";
+            formatted += "20 Php | ( " + denom.getDenom(20) + "x )\n";  
+            formatted += "10 Php | ( " + denom.getDenom(10) + "x )\n";
+            formatted += "5 Php | ( " + denom.getDenom(5) + "x )\n";  
+            formatted += "1 Php | ( " + denom.getDenom(1) + "x )\n";
+            
+            return formatted;
+            default:
+            return "null";
+        }
     }
 
     public boolean updateVendingDenom(JTextField[] tfArr){
@@ -126,15 +226,30 @@ public class ProgramModel {
             return ret;
         }
 
-        vendingMachine.getCurrentDenom().updateDenom(cCount[0], 1000);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[1], 500);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[2], 200);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[3], 100);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[4], 50);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[5], 20);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[6], 10);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[7], 5);
-        vendingMachine.getCurrentDenom().updateDenom(cCount[8], 1);
+        switch(activeVM){
+            case 1:
+            vm1.getCurrentDenom().updateDenom(cCount[0], 1000);
+            vm1.getCurrentDenom().updateDenom(cCount[1], 500);
+            vm1.getCurrentDenom().updateDenom(cCount[2], 200);
+            vm1.getCurrentDenom().updateDenom(cCount[3], 100);
+            vm1.getCurrentDenom().updateDenom(cCount[4], 50);
+            vm1.getCurrentDenom().updateDenom(cCount[5], 20);
+            vm1.getCurrentDenom().updateDenom(cCount[6], 10);
+            vm1.getCurrentDenom().updateDenom(cCount[7], 5);
+            vm1.getCurrentDenom().updateDenom(cCount[8], 1);
+            break;
+            case 2:
+            vm2.getCurrentDenom().updateDenom(cCount[0], 1000);
+            vm2.getCurrentDenom().updateDenom(cCount[1], 500);
+            vm2.getCurrentDenom().updateDenom(cCount[2], 200);
+            vm2.getCurrentDenom().updateDenom(cCount[3], 100);
+            vm2.getCurrentDenom().updateDenom(cCount[4], 50);
+            vm2.getCurrentDenom().updateDenom(cCount[5], 20);
+            vm2.getCurrentDenom().updateDenom(cCount[6], 10);
+            vm2.getCurrentDenom().updateDenom(cCount[7], 5);
+            vm2.getCurrentDenom().updateDenom(cCount[8], 1);
+            break;
+        }
 
         return ret;
     }
@@ -144,32 +259,65 @@ public class ProgramModel {
         int[] cVal = new int[3];
         boolean ret = true;
         
-        for(int i = 0; i < tfArr.length && ret != false; i++){
-            try{
-                cVal[i] = Integer.parseInt(tfArr[i].getText());
+        switch(activeVM){
+            case 1:
+            for(int i = 0; i < tfArr.length && ret != false; i++){
+                try{
+                    cVal[i] = Integer.parseInt(tfArr[i].getText());
 
-                if(i == 0 && ((cVal[0]-1) >= vendingMachine.getMaxSlots()) || ((cVal[0]-1) < 0)){ // out of bounds index
-                    System.out.println("Product index out of bounds.");
-                    ret = false;
+                    if(i == 0 && ((cVal[0]-1) >= vm1.getMaxSlots()) || ((cVal[0]-1) < 0)){ // out of bounds index
+                        System.out.println("Product index out of bounds.");
+                        ret = false;
+                    }
+                    else if(vm1.getSlots()[cVal[0]-1] == null){
+                        System.out.println("Product does not exist in slot.");
+                        ret = false;
+                    }
+                    else if(cVal[i] < 0 && i != 0){ // restock amount & price cannot be negative
+                        System.out.println("Negative restock amount and price not allowed.");
+                        ret = false;
+                    }
+                    else if(i == 1 && (vm1.getStockInSlots()[cVal[0]-1]+cVal[1] > vm2.getMaxStock())){ 
+                        // if restock amount+productSlotCount is greater than limit
+                        System.out.println("Restock amount is greater than limit.");
+                        ret = false;
+                    }
                 }
-                else if(vendingMachine.getSlots()[cVal[0]-1] == null){
-                    System.out.println("Product does not exist in slot.");
-                    ret = false;
-                }
-                else if(cVal[i] < 0 && i != 0){ // restock amount & price cannot be negative
-                    System.out.println("Negative restock amount and price not allowed.");
-                    ret = false;
-                }
-                else if(i == 1 && (vendingMachine.getStockInSlots()[cVal[0]-1]+cVal[1] > vendingMachine.getMaxStock())){ 
-                    // if restock amount+productSlotCount is greater than limit
-                    System.out.println("Restock amount is greater than limit.");
+                catch (NumberFormatException e){ // catch invalid inputs
+                    System.out.println("Input contains non-integer value.");
                     ret = false;
                 }
             }
-            catch (NumberFormatException e){ // catch invalid inputs
-                System.out.println("Input contains non-integer value.");
-                ret = false;
+            break;
+            case 2:
+            for(int i = 0; i < tfArr.length && ret != false; i++){
+                try{
+                    cVal[i] = Integer.parseInt(tfArr[i].getText());
+
+                    if(i == 0 && ((cVal[0]-1) >= vm2.getMaxSlots()) || ((cVal[0]-1) < 0)){ // out of bounds index
+                        System.out.println("Product index out of bounds.");
+                        ret = false;
+                    }
+                    else if(vm2.getSlots()[cVal[0]-1] == null){
+                        System.out.println("Product does not exist in slot.");
+                        ret = false;
+                    }
+                    else if(cVal[i] < 0 && i != 0){ // restock amount & price cannot be negative
+                        System.out.println("Negative restock amount and price not allowed.");
+                        ret = false;
+                    }
+                    else if(i == 1 && (vm2.getStockInSlots()[cVal[0]-1]+cVal[1] > vm2.getMaxStock())){ 
+                        // if restock amount+productSlotCount is greater than limit
+                        System.out.println("Restock amount is greater than limit.");
+                        ret = false;
+                    }
+                }
+                catch (NumberFormatException e){ // catch invalid inputs
+                    System.out.println("Input contains non-integer value.");
+                    ret = false;
+                }
             }
+            break;
         }
 
         if(ret == false){
@@ -177,8 +325,16 @@ public class ProgramModel {
         }
 
         // restock and update price
-        vendingMachine.restockProduct(cVal[0]-1, cVal[1]);
-        vendingMachine.getSlots()[cVal[0]-1].updatePrice(cVal[2]);
+        switch(activeVM){
+            case 1:
+            vm1.restockProduct(cVal[0]-1, cVal[1]);
+            vm1.getSlots()[cVal[0]-1].updatePrice(cVal[2]);
+            break;
+            case 2:
+            vm2.restockProduct(cVal[0]-1, cVal[1]);
+            vm2.getSlots()[cVal[0]-1].updatePrice(cVal[2]);
+            break;
+        }
 
         return ret;
     }
@@ -186,16 +342,29 @@ public class ProgramModel {
     public Products[] getProductList() {
         return this.productList;
     }
-
     public boolean updateProductIndex(int value) {
         
         int current = productIndex + value;
-        if (current < 0 || current > vendingMachine.getMaxSlots()){
+
+        switch(activeVM){
+            case 1:
+            if (current < 0 || current > productList.length){
+                return false;
+            }
+            else{
+                productIndex += value;
+                return true;
+            }
+            case 2:
+            if (current < 0 || current > productList.length){
+                return false;
+            }
+            else{
+                productIndex += value;
+                return true;
+            }
+            default:
             return false;
-        }
-        else{
-            productIndex += value;
-            return true;
         }
     }
 
@@ -206,17 +375,34 @@ public class ProgramModel {
     public int addProduct(Products product) {
 
         int ret = 0;
-        if(vendingMachine.addToSlots(product) == 0){
-            ret = 0;
-        }
-        else if(vendingMachine.addToSlots(product) == 1){
-            ret = 1;
-        }
-        else if(vendingMachine.addToSlots(product) == 2){
-            ret = 2;
+
+        switch(activeVM){
+            case 1:
+                if(vm1.addToSlots(product) == 0){
+                ret = 0;
+            }
+            else if(vm1.addToSlots(product) == 1){
+                    ret = 1;
+            }
+            else if(vm1.addToSlots(product) == 2){
+                ret = 2;
+            }
+            break;
+            case 2:
+                if(vm2.addToSlots(product) == 0){
+                ret = 0;
+            }
+            else if(vm2.addToSlots(product) == 1){
+                    ret = 1;
+            }
+            else if(vm2.addToSlots(product) == 2){
+                ret = 2;
+            }
+            break;
         }
 
         return ret;
+        
     }
 
     public Products getProductToBeSold(){
@@ -234,17 +420,37 @@ public class ProgramModel {
     public int transact(){
 
         int productToBeSoldIndex = 0;
+        int userCash = 0;;
+        int[] changeReturned = new int[9];
+        int productCost = 0;
+        boolean isBought = false;;
 
-        for(int i = 0; i < vendingMachine.getProductCount(); i++){
-            if(vendingMachine.getSlots()[i].getName() == productToBeSold.getName()){
-                productToBeSoldIndex = i;
+        switch(activeVM){
+            case 1:
+            for(int i = 0; i < vm1.getProductCount(); i++){
+                if(vm1.getSlots()[i].getName() == productToBeSold.getName()){
+                    productToBeSoldIndex = i;
+                }
             }
-        }
 
-        int userCash = userDenom.getTotal();
-        int[] changeReturned = getVendingMachine().getChangeReturned();
-        int productCost = vendingMachine.getSlots()[productToBeSoldIndex].getPrice();
-        boolean isBought = false;
+            userCash = userDenom.getTotal();
+            changeReturned = getVendingMachine().getChangeReturned();
+            productCost = vm1.getSlots()[productToBeSoldIndex].getPrice();
+            isBought = false;
+            break;
+            case 2:
+            for(int i = 0; i < vm2.getProductCount(); i++){
+                if(vm2.getSlots()[i].getName() == productToBeSold.getName()){
+                    productToBeSoldIndex = i;
+                }
+            }
+
+            userCash = userDenom.getTotal();
+            changeReturned = getVendingMachine().getChangeReturned();
+            productCost = vm2.getSlots()[productToBeSoldIndex].getPrice();
+            isBought = false;
+            break;
+        }
 
         if(userCash < productCost){ // not enough money
             return 0;
@@ -290,7 +496,14 @@ public class ProgramModel {
 
         if(isBought == true){
             // reduce stock
-            vendingMachine.reduceStock(productToBeSoldIndex);
+            switch(activeVM){
+                case 1:
+                vm1.reduceStock(productToBeSoldIndex);
+                break;
+                case 2:
+                vm2.reduceStock(productToBeSoldIndex);
+                break;
+            }
 
             // add cash input of user to current denom of vm
             getVendingMachine().getCurrentDenom().updateDenom(userDenom.getDenom(1), 1);
@@ -313,7 +526,16 @@ public class ProgramModel {
         
         formatted += "Money Provided: " + userDenom.getTotal() + " Php \n\n";
 
-        int[] change = vendingMachine.getChangeReturned();
+        int[] change = new int[9];
+
+        switch(activeVM){
+            case 1:
+            change = vm1.getChangeReturned().clone();
+            break;
+            case 2:
+            change = vm2.getChangeReturned().clone();
+            break;
+        }
 
         int total = 0;
         total += change[0] * 1000;
@@ -328,17 +550,53 @@ public class ProgramModel {
 
         formatted += "Change: " + total + " Php\n\n";
 
-        vendingMachine.resetChange();
+        switch(activeVM){
+            case 1:
+            vm1.resetChange();
+            break;
+            case 2:
+            vm2.resetChange();
+            break;
+        }
+
         return formatted;
 
     }
 
     public String getSummaryTransactions() {
 
-        Products[] slots = vendingMachine.getSlots();
-        Products[][] startingStock = vendingMachine.getStartingStock();
-        Products[][] currentStock = vendingMachine.getCurrentStock();
+        Products[] slots = new Products[vm1.getMaxSlots()];
+        Products[][] startingStock = new Products[vm1.getSlots().length][vm1.getMaxStock()];
+        Products[][] currentStock = new Products[vm1.getSlots().length][vm1.getMaxStock()];
 
+        switch(activeVM){
+            case 1:
+            slots = vm1.getSlots().clone();
+
+            startingStock = vm1.getStartingStock().clone();
+            for(int i = 0; i < startingStock.length; i++){
+                startingStock[i] = vm1.getStartingStock()[i].clone();
+            }
+
+            currentStock = vm1.getCurrentStock().clone();
+            for(int i = 0; i < currentStock.length; i++){
+                currentStock[i] = vm1.getCurrentStock()[i].clone();
+            }
+            break;
+            case 2:
+            slots = vm2.getSlots().clone();
+
+            startingStock = vm2.getStartingStock().clone();
+            for(int i = 0; i < startingStock.length; i++){
+                startingStock[i] = vm2.getStartingStock()[i].clone();
+            }
+
+            currentStock = vm2.getCurrentStock().clone();
+            for(int i = 0; i < currentStock.length; i++){
+                currentStock[i] = vm2.getCurrentStock()[i].clone();
+            }
+            break;
+        }
 
         String formatted = "[Starting Inventory & Ending Inventory]\n\n";
         
@@ -350,36 +608,75 @@ public class ProgramModel {
         ArrayList<Integer> currentStockArr = new ArrayList<Integer>();
         ArrayList<Integer> startStockArr = new ArrayList<Integer>();
 
-        for(int i = 0; i < vendingMachine.getProductCount(); i++){
+        switch(activeVM){
+            case 1:
+            for(int i = 0; i < vm1.getProductCount(); i++){
 
-            formatted += "Slot [" + (i+1) +"]: " + slots[i].getName() + "\n";
-            
-            startingStockCounter = 0;
-            int j = 0;
+                formatted += "Slot [" + (i+1) +"]: " + slots[i].getName() + "\n";
+                
+                startingStockCounter = 0;
+                int j = 0;
 
-            while(startingStock[i][j] != null){
-                startingStockCounter++;
-                j++;                
+                while(startingStock[i][j] != null){
+                    startingStockCounter++;
+                    j++;                
+                }
+
+                currentStockCounter = 0;
+                j = 0;
+                
+                while(currentStock[i][j] != null){
+                    currentStockCounter++;
+                    j++;                
+                }
+
+                currentStockArr.add(currentStockCounter);
+                startStockArr.add(startingStockCounter);
+
+                formatted += "(" + startingStockCounter + "x) -> (" + currentStockCounter + "x)\n\n";
             }
+            break;
+            case 2:
+            for(int i = 0; i < vm2.getProductCount(); i++){
 
-            currentStockCounter = 0;
-            j = 0;
-            
-            while(currentStock[i][j] != null){
-                currentStockCounter++;
-                j++;                
+                formatted += "Slot [" + (i+1) +"]: " + slots[i].getName() + "\n";
+                
+                startingStockCounter = 0;
+                int j = 0;
+
+                while(startingStock[i][j] != null){
+                    startingStockCounter++;
+                    j++;                
+                }
+
+                currentStockCounter = 0;
+                j = 0;
+                
+                while(currentStock[i][j] != null){
+                    currentStockCounter++;
+                    j++;                
+                }
+
+                currentStockArr.add(currentStockCounter);
+                startStockArr.add(startingStockCounter);
+
+                formatted += "(" + startingStockCounter + "x) -> (" + currentStockCounter + "x)\n\n";
             }
-
-            currentStockArr.add(currentStockCounter);
-            startStockArr.add(startingStockCounter);
-
-            formatted += "(" + startingStockCounter + "x) -> (" + currentStockCounter + "x)\n\n";
+            break;
         }
 
         int moneyCollected = 0;
 
-        for(int i = 0; i < vendingMachine.getProductCount(); i++){
-            moneyCollected += (startStockArr.get(i) - currentStockArr.get(i)) * slots[i].getPrice();
+        switch(activeVM){
+            case 1:
+            for(int i = 0; i < vm1.getProductCount(); i++){
+                moneyCollected += (startStockArr.get(i) - currentStockArr.get(i)) * slots[i].getPrice();
+            }
+            case 2:
+            for(int i = 0; i < vm2.getProductCount(); i++){
+                moneyCollected += (startStockArr.get(i) - currentStockArr.get(i)) * slots[i].getPrice();
+            }
+
         }
 
         formatted += "Cash Amount (since last restock) : " + moneyCollected + " Php";

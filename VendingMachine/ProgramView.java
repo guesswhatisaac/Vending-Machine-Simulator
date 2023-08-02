@@ -39,6 +39,10 @@ public class ProgramView {
     JButton testFeatures = new JButton("Test Features");
     JButton maintenance = new JButton("Maintenance");
     
+    //special vending components
+    JButton customCake = new JButton("Customize Cake");
+    JButton regularTransact = new JButton("Regular Transaction");
+
     // maintenance components
     JTextArea machineDetails = new JTextArea("");
     JButton modifyProducts = new JButton("Modify Products");
@@ -514,6 +518,38 @@ public class ProgramView {
 
     }
 
+    public void specialMenu(VendingMachine vm){
+        refreshFrame();
+
+        // create panel
+        JPanel panel1 = new JPanel();
+        panel1.setBorder(BorderFactory.createEmptyBorder(50, 50, 10, 50));
+        panel1.setLayout(new BorderLayout(0, 1)); 
+    
+        JPanel panel2 = new JPanel();
+        panel2.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        panel2.setLayout(new GridLayout(0, 1, 7, 7));
+        
+        JPanel panel3 = new JPanel();
+
+        // add components to panel
+        title = new JLabel("Special Vending Machine");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+        panel1.add(title);
+        panel2.add(customCake);
+        panel2.add(regularTransact);
+        panel2.add(returnToTestBtn);        
+        panel3.add(feedback);
+        
+        //add components
+        panel1.setBackground(Color.darkGray);
+        panel3.setBackground(Color.LIGHT_GRAY);
+        mainFrame.add(panel1, BorderLayout.NORTH);
+        mainFrame.add(panel2, BorderLayout.CENTER);
+        mainFrame.add(panel3, BorderLayout.SOUTH);
+    }
+
     public void testFeaturesMenu(VendingMachine vm){
         
         refreshFrame();
@@ -718,7 +754,7 @@ public class ProgramView {
         JPanel panel3 = new JPanel();
 
         // add components to panel
-        title = new JLabel("Reciept");
+        title = new JLabel("Receipt");
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Arial", Font.BOLD, 25));
 
@@ -784,6 +820,14 @@ public class ProgramView {
 
 
     // BUTTON LISTENERS --------------------------
+
+    public void setCustomCakeBtnListener(ActionListener actionListener) {
+		this.customCake.addActionListener(actionListener);
+	}
+
+    public void setRegularTransactBtnListener(ActionListener actionListener) {
+		this.regularTransact.addActionListener(actionListener);
+	}
 
 	public void setCreateVMBtnListener(ActionListener actionListener) {
 		this.createVM.addActionListener(actionListener);

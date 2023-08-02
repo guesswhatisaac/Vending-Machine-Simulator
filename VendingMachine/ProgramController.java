@@ -90,8 +90,6 @@ public class ProgramController {
 
         // TEST MENU ---------------------
 
-        model.initializeProducts();
-
         view.setMaintenanceListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
