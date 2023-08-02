@@ -55,7 +55,6 @@ public class VendingMachine {
         }
 
         for(int i = 0; i < restockAmount; i++){
-            System.out.println(i);
             Products productClone = slots[productSlotIndex];
             startingStock[productSlotIndex][stockInSlots[productSlotIndex]] = productClone;
             stockInSlots[productSlotIndex]++;

@@ -5,6 +5,8 @@ public class ProgramModel {
     private VendingMachine vendingMachine;   
     private Products productList[];
     private int productIndex = 0;
+    private Products productToBeSold;
+    private Denominations userDenom = new Denominations();
 
     // MAIN MENU -------------------
 
@@ -62,6 +64,27 @@ public class ProgramModel {
         }
 
         return formatted;
+    }
+
+    public String getPayDetails() {
+        
+        String formatted = "Item to be bought: " + productToBeSold.getName() + "\n\n";
+
+        formatted += "[1000 Php]: (" + userDenom.getDenom(1000) + "x)\t\t";
+        formatted += "[500 Php]: (" + userDenom.getDenom(500) + "x)\t\t";
+        formatted += "[200 Php]: (" + userDenom.getDenom(200) + "x)\t\t";
+        formatted += "[100 Php]: (" + userDenom.getDenom(100) + "x)\t\t";
+        formatted += "[50 Php]: (" + userDenom.getDenom(50) + "x)\t\t\n";
+        formatted += "[20 Php]: (" + userDenom.getDenom(20) + "x)\t\t";
+        formatted += "[10 Php]: (" + userDenom.getDenom(10) + "x)\t\t";
+        formatted += "[5 Php]: (" + userDenom.getDenom(5) + "x)\t\t";
+        formatted += "[1 Php]: (" + userDenom.getDenom(1) + "x)\t\t\n\n";
+
+        formatted += "Total: " + userDenom.getTotal() + " Php";
+
+
+        return formatted;
+
     }
 
     public String getDenomDetails() {
@@ -194,7 +217,18 @@ public class ProgramModel {
         }
 
         return ret;
-        
+    }
+
+    public Products getProductToBeSold(){
+        return productToBeSold;
+    }
+
+    public void setProductToBeSold(Products productSelected){
+        this.productToBeSold = productSelected;
+    }
+
+    public Denominations getUserDenom(){
+        return userDenom;
     }
 
 }

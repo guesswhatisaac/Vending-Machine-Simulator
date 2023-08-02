@@ -1,8 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JTextField;
-
 public class ProgramController {
     private ProgramModel model;
     private ProgramView view;
@@ -256,7 +254,246 @@ public class ProgramController {
             @Override
             public void actionPerformed(ActionEvent e){
                 System.out.println("Moving to Test Menu...");
-                view.testFeaturesMenu();
+                view.testFeaturesMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setProduct1BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[0] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[0]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct2BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[1] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[1]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct3BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[2] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[2]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });        
+
+        view.setProduct4BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[3] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[3]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct5BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[4] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[4]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct6BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[5] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[5]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct7BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[6] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[6]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct8BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[7] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[7]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct9BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[8] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[8]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setProduct10BtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(model.getVendingMachine().getSlots()[9] != null){
+                    model.setProductToBeSold(model.getVendingMachine().getSlots()[9]);
+                    model.getUserDenom().collectMoney();
+                    view.setPayDetails(model.getPayDetails());
+                    view.payMenu(model.getVendingMachine());
+                }
+                else{
+                    System.out.println("EMPTY");
+                }
+            }
+        });
+
+        view.setC1000PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 1000);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC500PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 500);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC200PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 200);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC100PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 100);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC50PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 50);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC20PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 20);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC10PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 10);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC5PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 5);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setC1PayBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.getUserDenom().updateDenom(1, 1);
+                view.setPayDetails(model.getPayDetails());
+                view.payMenu(model.getVendingMachine());
+            }
+        });
+
+        view.setReturnToTransactBtnListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                System.out.println("Returning to Transact Menu...");
+                view.testFeaturesMenu(model.getVendingMachine());
             }
         });
 

@@ -152,10 +152,10 @@ public class Denominations {
      *
      * @return the total amount of money collected
      */
-    public int collectMoney() { 
+    public void collectMoney() { 
 
         int cash = 0;
-
+        
         cash += getDenom(1000) * 1000;
         updateDenom(-(this.c1000), 1000);
         
@@ -183,7 +183,8 @@ public class Denominations {
         cash += getDenom(1) * 1;
         updateDenom(-(this.c1), 1);
 
-        return cash;
+        System.out.println(cash + " removed.");
+
     }
 
     /**
