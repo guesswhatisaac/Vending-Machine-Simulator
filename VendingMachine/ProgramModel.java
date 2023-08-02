@@ -9,12 +9,16 @@ public class ProgramModel {
     private Products productList[];
     private Products custom[];
     private Products required[];
+    private ArrayList<Products> addedCakeToppings;
     private int productIndex = 0;
     private Products productToBeSold;
     private Denominations userDenom = new Denominations();
 
     // MAIN MENU -------------------
 
+    /**
+     * Creates a new instance of the standard vending machine, sets it as the active vending machine, and initializes the product array.
+     */
     public void createRegularVM() {
         this.vm1 = new RegularVM();
         activeVM = 1;
@@ -22,13 +26,21 @@ public class ProgramModel {
         initializeProducts();
     }
 
+    /**
+     * Creates a new instance of the special vending machine, sets it as the active vending machine, and initializes the product array.
+     */
     public void createSpecialVM() {
         this.vm2 = new SpecialVM();
+        addedCakeToppings = new ArrayList<Products>();
         activeVM = 2;
         productIndex = 0;
         initializeProducts();
     }
 
+    /**
+     * Getter for the currently active vending machine object
+     * @return the active vending machine if any, null if no active vending machine.
+     */
     public VendingMachine getVendingMachine() {
         switch(activeVM){
             case 1:
@@ -42,6 +54,9 @@ public class ProgramModel {
 
     // MAINTENANCE & TEST FEATURES -------------
 
+    /**
+     * Initializes list  of preset products depending on which vending machine is currently active.
+     */
     public void initializeProducts() {
         Products Strawberry = new Products("Strawberry",  8.64f, 25);
         Products Blueberries = new Products("Blueberries",  80f, 150);
@@ -76,6 +91,17 @@ public class ProgramModel {
         
     }
  
+    /**
+     * Getter for the active vending machine number
+     * @return 1 if standard is active, 2 if special is active.
+     */
+    public int getActiveVM(){
+        return activeVM;
+    }
+
+    /**
+     * Initializes the custom and required arrays for custom cake related processes.
+     */
     public void initializeCake(){
         custom = new Products[10];
         required = new Products[6];
@@ -94,6 +120,10 @@ public class ProgramModel {
         }
     }
 
+    /**
+     * Returns a string containing the current machine details, including products available and current cash balance.
+     * @return string containing cash balance and products currently in vending machine.
+     */
     public String getMachineDetails() {
         
         String formatted;
@@ -143,6 +173,10 @@ public class ProgramModel {
         }
     }
 
+    /**
+     * Returns a string containing payment details, including the purchased item and total amount user has input.
+     * @return string containing payment details.
+     */
     public String getPayDetails() {
         
         String formatted = "Item to be bought: " + productToBeSold.getName() + "\n\n";
@@ -163,6 +197,10 @@ public class ProgramModel {
 
     }
 
+    /**
+     * Returns a string containing the denominations currently in the vending machine
+     * @return string containing denominations
+     */
     public String getDenomDetails() {
 
         String formatted;
@@ -206,6 +244,11 @@ public class ProgramModel {
         }
     }
 
+    /**
+     * Updates the value of all denominations in the vending machine
+     * @param tfArr An array containing the values each denomination is to be incremented by
+     * @return true if successful, false if error encountered
+     */
     public boolean updateVendingDenom(JTextField[] tfArr){
 
         int[] cCount = new int[9];
@@ -254,6 +297,11 @@ public class ProgramModel {
         return ret;
     }
 
+    /**
+     * Updates the chosen products information, such as stock and price
+     * @param tfArr represents the slots of the vending machine containing the products
+     * @return true if successful, false if error encountered.
+     */
     public boolean updateVendingProduct(JTextField[] tfArr){
         
         int[] cVal = new int[3];
@@ -339,9 +387,19 @@ public class ProgramModel {
         return ret;
     }
 
+    /**
+     * Getter for the product list array
+     * @return product list array
+     */
     public Products[] getProductList() {
         return this.productList;
     }
+
+    /**
+     * Updates the currenttly viewed product index
+     * @param value
+     * @return
+     */
     public boolean updateProductIndex(int value) {
         
         int current = productIndex + value;
@@ -683,4 +741,37 @@ public class ProgramModel {
         return formatted;
     }
 
+    public String toppingList(){
+        String formatted = "List of Toppings Added:\n\n";
+
+        for(int i = 0; i < addedCakeToppings.size(); i++){
+            formatted += (i+1) + ".) " + addedCakeToppings.get(i).getName() + "\n";
+        }
+
+        return formatted;
+    }
+
+    public boolean addToCakeToppings(Products productAdded){
+
+        boolean ret = true;
+
+        for(int i = 0; i < addedCakeToppings.size(); i++){
+            if(addedCakeToppings.get(i) == productAdded){
+                ret = false;
+            }
+        }
+
+        if(ret == true){
+            addedCakeToppings.add(productAdded);
+        }
+
+        return ret;
+    }
+
+
+    public void removeAllToppings() {
+        for(int i = 0; i < addedCakeToppings.size(); i++){
+            addedCakeToppings.remove(i);
+        }
+    }
 }
